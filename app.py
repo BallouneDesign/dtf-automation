@@ -22,6 +22,9 @@ TEMPLATES = {
 BASE_DIR = os.path.dirname(__file__)
 
 def charger_template(variante):
+    # Extraire le destinataire (dernier élément après " / ")
+    if " / " in variante:
+        variante = variante.split(" / ")[-1]
     nom_fichier = TEMPLATES.get(variante.lower().strip())
     if not nom_fichier:
         return None, f"Variante inconnue: {variante}"
