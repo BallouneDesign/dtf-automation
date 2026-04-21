@@ -1,5 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 import os
+import io
+import cairosvg
 
 app = Flask(__name__)
 
@@ -34,17 +36,18 @@ def generer():
     data = request.json
     if not data:
         return jsonify({"error": "Aucune donnée reçue"}), 400
-    texte = data.get("custom_text", "").strip()
-    text_color = COULEURS.get(data.get("text_color", "").lower().strip(), "#231f20")
+    texte        = data.get("custom_text", "").strip()
+    text_color   = COULEURS.get(data.get("text_color",   "").lower().strip(), "#231f20")
     design_color = COULEURS.get(data.get("design_color", "").lower().strip(), "#231f20")
-    variante = data.get("variante", "maman").strip()
-    svg, erreur = charger_template(variante)
+    variante     = data.get("variante", "maman").strip()
+    svg, erreur  = charger_template(variante)
     if erreur:
         return jsonify({"error": erreur}), 400
-    svg = svg.replace("{{custom_text}}", texte)
-    svg = svg.replace("{{text_color}}", text_color)
+    svg = svg.replace("{{custom_text}}",  texte)
+    svg = svg.replace("{{text_color}}",   text_color)
     svg = svg.replace("{{design_color}}", design_color)
-    return jsonify({"svg": svg, "status": "ok", "variante": variante})
+    png = cairosvg.svg2png(bytestring=svg.encode("utf-8"), dpi=300)
+    return send_file(io.BytesIO(png), mimetype="image/png", download_name="design.png")
 
 @app.route("/", methods=["GET"])
 def accueil():
