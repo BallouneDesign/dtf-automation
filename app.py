@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import re
 
 app = Flask(__name__)
 
@@ -18,11 +17,20 @@ COULEURS = {
     "gris": "#616161",
 }
 
-TEMPLATE = open("templates/grand-maman-bouquet-TEMPLATE.svg").read()
+with open("templates/grand-maman-bouquet-TEMPLATE.svg") as f:
+    TEMPLATE = f.read()
 
 @app.route("/generer", methods=["POST"])
 def generer():
     data = request.json
     texte = data.get("custom_text", "")
     text_color = COULEURS.get(data.get("text_color", "").lower(), "#231f20")
-    design_color = COULEURS.
+    design_color = COULEURS.get(data.get("design_color", "").lower(), "#231f20")
+    svg = TEMPLATE
+    svg = svg.replace("{{custom_text}}", texte)
+    svg = svg.replace("{{text_color}}", text_color)
+    svg = svg.replace("{{design_color}}", design_color)
+    return jsonify({"svg": svg, "status": "ok"})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
