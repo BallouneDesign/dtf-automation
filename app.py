@@ -4,18 +4,10 @@ import os
 app = Flask(__name__)
 
 COULEURS = {
-    "noir":        "#231f20",
-    "blanc":       "#FFFFFF",
-    "rouge":       "#D32F2F",
-    "rose":        "#E91E8C",
-    "bleu marine": "#1A237E",
-    "bleu ciel":   "#29B6F6",
-    "vert":        "#2E7D32",
-    "mauve":       "#7B1FA2",
-    "orange":      "#E65100",
-    "turquoise":   "#00838F",
-    "or":          "#F9A825",
-    "gris":        "#616161",
+    "blanc": "#FFFFFF",
+    "noir":  "#231f20",
+    "rose":  "#F4A1A7",
+    "lilas": "#CB90BF",
 }
 
 TEMPLATES = {
@@ -25,4 +17,16 @@ TEMPLATES = {
     "mamou":       "mamou-bouquet-TEMPLATE.svg",
 }
 
-BASE_DIR = os
+BASE_DIR = os.path.dirname(__file__)
+
+def charger_template(variante):
+    nom_fichier = TEMPLATES.get(variante.lower().strip())
+    if not nom_fichier:
+        return None, f"Variante inconnue: {variante}"
+    chemin = os.path.join(BASE_DIR, nom_fichier)
+    if not os.path.exists(chemin):
+        return None, f"Fichier introuvable: {nom_fichier}"
+    with open(chemin, encoding="utf-8") as f:
+        return f.read(), None
+
+@app.route("/generer", methods=["POST"]
