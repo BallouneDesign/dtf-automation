@@ -11,10 +11,10 @@ COULEURS = {
 }
 
 TEMPLATES = {
-    "maman":       "maman-bouquet-TEMPLATE.svg",
-    "mamie":       "mamie-bouquet-TEMPLATE.svg",
-    "grand-maman": "grand-maman-bouquet-TEMPLATE.svg",
-    "mamou":       "mamou-bouquet-TEMPLATE.svg",
+    "maman":       "maman-bouquet.svg",
+    "mamie":       "mamie bouquet.svg",
+    "grand-maman": "grand-maman-bouquet.svg",
+    "mamou":       "mamou-bouquet.svg",
 }
 
 BASE_DIR = os.path.dirname(__file__)
